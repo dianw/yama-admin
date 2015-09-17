@@ -1,0 +1,13 @@
+<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+	<md-toolbar class="md-whiteframe-z1">
+		<h1>Home</h1>
+	</md-toolbar>
+
+	<md-list>
+		<md-list-item ng-repeat="m in menus" ng-click="goTo(m.ref)">
+			<md-icon class="material-icons">{{ m.icon }}</md-icon>
+			<p>{{ m.menu }}</p>
+		</md-list-item>
+	</md-list>
+
+</md-sidenav>
