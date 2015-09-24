@@ -7,6 +7,8 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 module.exports = function (grunt) {
 
 	// Time how long tasks take. Can help when optimizing build times
@@ -16,7 +18,8 @@ module.exports = function (grunt) {
 	require('jit-grunt')(grunt, {
 		useminPrepare: 'grunt-usemin',
 		ngtemplates: 'grunt-angular-templates',
-		cdnify: 'grunt-google-cdn'
+		cdnify: 'grunt-google-cdn',
+		configureProxies: 'grunt-connect-proxy'
 	});
 
 	// Configurable paths for the application
@@ -77,22 +80,33 @@ module.exports = function (grunt) {
 				hostname: 'localhost',
 				livereload: 35729
 			},
+			proxies: [
+				{
+					context: '/',
+					host: 'yama2.meruvian.org',
+					port: 80,
+					headers: {
+						host: 'yama2.meruvian.org'
+					}
+				}
+			],
 			livereload: {
 				options: {
 					open: true,
+					base: [
+						'.tmp',
+						appConfig.app
+					],
 					middleware: function (connect) {
-						return [
+						// Setup the proxy
+						var middlewares = [
 							connect.static('.tmp'),
-							connect().use(
-								'/bower_components',
-								connect.static('./bower_components')
-							),
-							connect().use(
-								'/app/styles',
-								connect.static('./app/styles')
-							),
-							connect.static(appConfig.app)
+							connect().use( '/bower_components', connect.static('./bower_components')),
+							connect.static(appConfig.app),
+							proxySnippet
 						];
+
+						return middlewares;
 					}
 				}
 			},
@@ -230,7 +244,10 @@ module.exports = function (grunt) {
 				}
 				],
 				options: {
-					appName: 'yamaAdminMaterialApp'
+					appName: 'yamaAdminApp',
+					provider: {
+						suffix: ''
+					}
 				}
 			}
 		},
@@ -377,7 +394,7 @@ module.exports = function (grunt) {
 		ngtemplates: {
 			dist: {
 				options: {
-					module: 'yamaAdminMaterialApp',
+					module: 'yamaAdminApp',
 					htmlmin: '<%= htmlmin.dist.options %>',
 					usemin: 'scripts/scripts.js'
 				},
@@ -477,6 +494,7 @@ module.exports = function (grunt) {
 			'concurrent:server',
 			'injector',
 			'autoprefixer:server',
+			'configureProxies',
 			'connect:livereload',
 			'watch'
 		]);

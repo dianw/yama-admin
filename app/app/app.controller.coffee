@@ -1,5 +1,8 @@
 'use strict'
 
 class App extends Controller
-	constructor: ($state) ->
-		$state.go('app.backend');
+	constructor: ($state, $rootScope, $timeout) ->
+		ctrl = @
+		# ProfilePictures.reloadPhoto();
+
+		$state.go 'app.admin'

@@ -5,4 +5,4 @@ class App extends Config
 		$stateProvider.state 'app',
 			url: '/',
 			templateUrl: 'app/app.html',
-			controller: 'appController'
+			controller: 'appController as ctrl'
