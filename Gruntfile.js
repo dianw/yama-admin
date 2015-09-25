@@ -32,7 +32,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 
 		// Project settings
-		yeoman: appConfig,
+		yama: appConfig,
 
 		// Watches files for changes and runs tasks based on the changed files
 		watch: {
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 				tasks: ['wiredep']
 			},
 			ngClassify: {
-				files: ['<%= yeoman.app %>/**/*.{coffee,litcoffee,coffee.md}'],
+				files: ['<%= yama.app %>/**/*.{coffee,litcoffee,coffee.md}'],
 				tasks: ['newer:ngClassify']
 			},
 			coffee: {
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
 				tasks: ['newer:coffee:test', 'karma']
 			},
 			styles: {
-				files: ['<%= yeoman.app %>/styles/**/*.css'],
+				files: ['<%= yama.app %>/styles/**/*.css'],
 				tasks: ['newer:copy:styles', 'autoprefixer']
 			},
 			gruntfile: {
@@ -64,10 +64,10 @@ module.exports = function (grunt) {
 					livereload: '<%= connect.options.livereload %>'
 				},
 				files: [
-					'<%= yeoman.app %>/**/*.html',
+					'<%= yama.app %>/**/*.html',
 					'.tmp/styles/**/*.css',
 					'.tmp/scripts/**/*.js',
-					'<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
+					'<%= yama.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
 				]
 			}
 		},
@@ -129,7 +129,7 @@ module.exports = function (grunt) {
 			dist: {
 				options: {
 					open: true,
-					base: '<%= yeoman.dist %>'
+					base: '<%= yama.dist %>'
 				}
 			}
 		},
@@ -154,8 +154,8 @@ module.exports = function (grunt) {
 					dot: true,
 					src: [
 						'.tmp',
-						'<%= yeoman.dist %>/{,*/}*',
-						'!<%= yeoman.dist %>/.git{,*/}*'
+						'<%= yama.dist %>/{,*/}*',
+						'!<%= yama.dist %>/.git{,*/}*'
 					]
 				}]
 			},
@@ -191,7 +191,7 @@ module.exports = function (grunt) {
 		// Automatically inject Bower components into the app
 		wiredep: {
 			app: {
-				src: ['<%= yeoman.app %>/index.html'],
+				src: ['<%= yama.app %>/index.html'],
 				ignorePath:	/\.\.\//
 			},
 			test: {
@@ -217,17 +217,17 @@ module.exports = function (grunt) {
 		// Automatically inject scripts and styles into the app
 		injector: {
 			options: {
-				ignorePath: ['.tmp', '<%= yeoman.app %>'],
+				ignorePath: ['.tmp', '<%= yama.app %>'],
 				addRootSlash: false
 			},
 			local_dependencies: {
 				files: {
-					'<%= yeoman.app %>/index.html': [
+					'<%= yama.app %>/index.html': [
 						'.tmp/**/*.js',
 						'!.tmp/scripts/app.js',
 						'!.tmp/components/oauth2/oauth2.js',
 						'!.tmp/frontend/register/*.js',
-						'<%= yeoman.app %>/**/*.css'
+						'<%= yama.app %>/**/*.css'
 					],
 				}
 			}
@@ -237,7 +237,7 @@ module.exports = function (grunt) {
 			app: {
 				files: [
 				{
-					cwd: '<%= yeoman.app %>',
+					cwd: '<%= yama.app %>',
 					src: '**/*.coffee',
 					dest: '.tmp/coffee',
 					expand: true
@@ -282,10 +282,10 @@ module.exports = function (grunt) {
 		filerev: {
 			dist: {
 				src: [
-					'<%= yeoman.dist %>/scripts/{,*/}*.js',
-					'<%= yeoman.dist %>/styles/{,*/}*.css',
-					'<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-					'<%= yeoman.dist %>/styles/fonts/*'
+					'<%= yama.dist %>/scripts/{,*/}*.js',
+					'<%= yama.dist %>/styles/{,*/}*.css',
+					'<%= yama.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+					'<%= yama.dist %>/styles/fonts/*'
 				]
 			}
 		},
@@ -294,9 +294,9 @@ module.exports = function (grunt) {
 		// concat, minify and revision files. Creates configurations in memory so
 		// additional tasks can operate on them
 		useminPrepare: {
-			html: '<%= yeoman.app %>/index.html',
+			html: '<%= yama.app %>/index.html',
 			options: {
-				dest: '<%= yeoman.dist %>',
+				dest: '<%= yama.dist %>',
 				flow: {
 					html: {
 						steps: {
@@ -311,14 +311,14 @@ module.exports = function (grunt) {
 
 		// Performs rewrites based on filerev and the useminPrepare configuration
 		usemin: {
-			html: ['<%= yeoman.dist %>/{,*/}*.html'],
-			css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-			js: ['<%= yeoman.dist %>/scripts/{,*/}*.js'],
+			html: ['<%= yama.dist %>/{,*/}*.html'],
+			css: ['<%= yama.dist %>/styles/{,*/}*.css'],
+			js: ['<%= yama.dist %>/scripts/{,*/}*.js'],
 			options: {
 				assetsDirs: [
-					'<%= yeoman.dist %>',
-					'<%= yeoman.dist %>/images',
-					'<%= yeoman.dist %>/styles'
+					'<%= yama.dist %>',
+					'<%= yama.dist %>/images',
+					'<%= yama.dist %>/styles'
 				],
 				patterns: {
 					js: [[/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']]
@@ -333,7 +333,7 @@ module.exports = function (grunt) {
 		// cssmin: {
 		//	 dist: {
 		//		 files: {
-		//			 '<%= yeoman.dist %>/styles/main.css': [
+		//			 '<%= yama.dist %>/styles/main.css': [
 		//				 '.tmp/styles/{,*/}*.css'
 		//			 ]
 		//		 }
@@ -342,8 +342,8 @@ module.exports = function (grunt) {
 		// uglify: {
 		//	 dist: {
 		//		 files: {
-		//			 '<%= yeoman.dist %>/scripts/scripts.js': [
-		//				 '<%= yeoman.dist %>/scripts/scripts.js'
+		//			 '<%= yama.dist %>/scripts/scripts.js': [
+		//				 '<%= yama.dist %>/scripts/scripts.js'
 		//			 ]
 		//		 }
 		//	 }
@@ -356,9 +356,9 @@ module.exports = function (grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: '<%= yeoman.app %>/images',
+					cwd: '<%= yama.app %>/images',
 					src: '{,*/}*.{png,jpg,jpeg,gif}',
-					dest: '<%= yeoman.dist %>/images'
+					dest: '<%= yama.dist %>/images'
 				}]
 			}
 		},
@@ -367,9 +367,9 @@ module.exports = function (grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: '<%= yeoman.app %>/images',
+					cwd: '<%= yama.app %>/images',
 					src: '{,*/}*.svg',
-					dest: '<%= yeoman.dist %>/images'
+					dest: '<%= yama.dist %>/images'
 				}]
 			}
 		},
@@ -384,9 +384,9 @@ module.exports = function (grunt) {
 				},
 				files: [{
 					expand: true,
-					cwd: '<%= yeoman.dist %>',
+					cwd: '<%= yama.dist %>',
 					src: ['*.html'],
-					dest: '<%= yeoman.dist %>'
+					dest: '<%= yama.dist %>'
 				}]
 			}
 		},
@@ -398,7 +398,7 @@ module.exports = function (grunt) {
 					htmlmin: '<%= htmlmin.dist.options %>',
 					usemin: 'scripts/scripts.js'
 				},
-				cwd: '<%= yeoman.app %>',
+				cwd: '<%= yama.app %>',
 				src: 'views/{,*/}*.html',
 				dest: '.tmp/templateCache.js'
 			}
@@ -420,7 +420,7 @@ module.exports = function (grunt) {
 		// Replace Google CDN references
 		cdnify: {
 			dist: {
-				html: ['<%= yeoman.dist %>/*.html']
+				html: ['<%= yama.dist %>/*.html']
 			}
 		},
 
@@ -430,8 +430,8 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					dot: true,
-					cwd: '<%= yeoman.app %>',
-					dest: '<%= yeoman.dist %>',
+					cwd: '<%= yama.app %>',
+					dest: '<%= yama.dist %>',
 					src: [
 						'*.{ico,png,txt}',
 						'.htaccess',
@@ -442,13 +442,13 @@ module.exports = function (grunt) {
 				}, {
 					expand: true,
 					cwd: '.tmp/images',
-					dest: '<%= yeoman.dist %>/images',
+					dest: '<%= yama.dist %>/images',
 					src: ['generated/*']
 				}]
 			},
 			styles: {
 				expand: true,
-				cwd: '<%= yeoman.app %>/styles',
+				cwd: '<%= yama.app %>/styles',
 				dest: '.tmp/styles/',
 				src: '{,*/}*.css'
 			}
