@@ -53,7 +53,7 @@ class Oauth extends Provider
 
 		@isExpired = -> AccessToken.expired()
 
-		@$get = ($injector) ->
+		@$get = ['$injector', ($injector) ->
 			setup $injector
 
 			login: this.login
@@ -61,3 +61,4 @@ class Oauth extends Provider
 			isAuthorized: this.isAuthorized
 			getAccessToken: this.getAccessToken
 			isExpired: this.isExpired
+		]
