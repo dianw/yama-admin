@@ -17,9 +17,9 @@ module.exports = function (grunt) {
 	// Automatically load required Grunt tasks
 	require('jit-grunt')(grunt, {
 		useminPrepare: 'grunt-usemin',
-		ngtemplates: 'grunt-angular-templates',
 		cdnify: 'grunt-google-cdn',
-		configureProxies: 'grunt-connect-proxy'
+		configureProxies: 'grunt-connect-proxy',
+		closureCompiler: 'grunt-closurecompiler'
 	});
 
 	// Configurable paths for the application
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
 			},
 			ngClassify: {
 				files: ['<%= yama.app %>/**/*.{coffee,litcoffee,coffee.md}'],
-				tasks: ['newer:ngClassify']
+				tasks: ['newer:ngClassify:app', 'newer:ngClassify:dev']
 			},
 			coffee: {
 				files: ['.tmp/coffee/**/*.{coffee,litcoffee,coffee.md}'],
@@ -223,10 +223,8 @@ module.exports = function (grunt) {
 			local_dependencies: {
 				files: {
 					'<%= yama.app %>/index.html': [
-						'.tmp/**/*.js',
+						'.tmp/scripts/**/*.js',
 						'!.tmp/scripts/app.js',
-						'!.tmp/components/oauth2/oauth2.js',
-						'!.tmp/frontend/register/*.js',
 						'<%= yama.app %>/**/*.css'
 					],
 				}
@@ -234,21 +232,41 @@ module.exports = function (grunt) {
 		},
 
 		ngClassify: {
+			options: {
+				appName: 'yamaAdminApp',
+				provider: {
+					suffix: ''
+				}
+			},
 			app: {
 				files: [
-				{
-					cwd: '<%= yama.app %>',
-					src: '**/*.coffee',
-					dest: '.tmp/coffee',
-					expand: true
-				}
-				],
-				options: {
-					appName: 'yamaAdminApp',
-					provider: {
-						suffix: ''
+					{
+						cwd: '<%= yama.app %>',
+						src: ['**/*.coffee', '!**/config*.coffee'],
+						dest: '.tmp/coffee',
+						expand: true
 					}
-				}
+				]
+			},
+			dev: {
+				files: [
+					{
+						cwd: '<%= yama.app %>',
+						src: '**/config*dev.coffee',
+						dest: '.tmp/coffee',
+						expand: true
+					}
+				]
+			},
+			prod: {
+				files: [
+					{
+						cwd: '<%= yama.app %>',
+						src: '**/config*prod.coffee',
+						dest: '.tmp/coffee',
+						expand: true
+					}
+				]
 			}
 		},
 
@@ -285,7 +303,7 @@ module.exports = function (grunt) {
 					'<%= yama.dist %>/scripts/{,*/}*.js',
 					'<%= yama.dist %>/styles/{,*/}*.css',
 					'<%= yama.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-					'<%= yama.dist %>/styles/fonts/*'
+					'<%= yama.dist %>/fonts/*'
 				]
 			}
 		},
@@ -300,7 +318,7 @@ module.exports = function (grunt) {
 				flow: {
 					html: {
 						steps: {
-							js: ['concat', 'uglifyjs'],
+							js: ['concat'],
 							css: ['cssmin']
 						},
 						post: {}
@@ -339,17 +357,9 @@ module.exports = function (grunt) {
 		//		 }
 		//	 }
 		// },
-		// uglify: {
-		//	 dist: {
-		//		 files: {
-		//			 '<%= yama.dist %>/scripts/scripts.js': [
-		//				 '<%= yama.dist %>/scripts/scripts.js'
-		//			 ]
-		//		 }
-		//	 }
-		// },
 		// concat: {
-		//	 dist: {}
+		// 	dist: {
+		// 	}
 		// },
 
 		imagemin: {
@@ -385,35 +395,27 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					cwd: '<%= yama.dist %>',
-					src: ['*.html'],
+					src: ['**/*.html'],
 					dest: '<%= yama.dist %>'
 				}]
 			}
 		},
 
-		ngtemplates: {
-			dist: {
+		closurecompiler: {
+			minify: {
+				files: [
+					{
+						expand: true,
+						cwd: '<%= yama.dist %>/scripts/',
+						src: ['**/*.js'],
+						dest: '<%= yama.dist %>/scripts/'
+					}
+				],
 				options: {
-					module: 'yamaAdminApp',
-					htmlmin: '<%= htmlmin.dist.options %>',
-					usemin: 'scripts/scripts.js'
-				},
-				cwd: '<%= yama.app %>',
-				src: 'views/{,*/}*.html',
-				dest: '.tmp/templateCache.js'
-			}
-		},
-
-		// ng-annotate tries to make the code safe for minification automatically
-		// by using the Angular long form for dependency injection.
-		ngAnnotate: {
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '.tmp/concat/scripts',
-					src: '*.js',
-					dest: '.tmp/concat/scripts'
-				}]
+					'compilation_level': 'SIMPLE_OPTIMIZATIONS',
+					'max_processes': 5,
+					'language_in': 'ECMASCRIPT5'
+				}
 			}
 		},
 
@@ -435,7 +437,7 @@ module.exports = function (grunt) {
 					src: [
 						'*.{ico,png,txt}',
 						'.htaccess',
-						'*.html',
+						'**/*.html',
 						'images/{,*/}*.{webp}',
 						'styles/fonts/{,*/}*.*'
 					]
@@ -444,6 +446,18 @@ module.exports = function (grunt) {
 					cwd: '.tmp/images',
 					dest: '<%= yama.dist %>/images',
 					src: ['generated/*']
+				}, {
+					expand: true,
+					dot: true,
+					cwd: 'bower_components/bootstrap/dist',
+					src: ['fonts/*.*'],
+					dest: '<%= yama.dist %>'
+				}, {
+					expand: true,
+					dot: true,
+					cwd: 'bower_components/font-awesome',
+					src: ['fonts/*.*'],
+					dest: '<%= yama.dist %>'
 				}]
 			},
 			styles: {
@@ -456,6 +470,10 @@ module.exports = function (grunt) {
 
 		// Run some tasks in parallel to speed up the build process
 		concurrent: {
+			ngClassifyServer: [
+				'ngClassify:app',
+				'ngClassify:dev'
+			],
 			server: [
 				'coffee:dist',
 				'copy:styles'
@@ -463,6 +481,10 @@ module.exports = function (grunt) {
 			test: [
 				'coffee',
 				'copy:styles'
+			],
+			ngClassifyDist: [
+				'ngClassify:app',
+				'ngClassify:prod'
 			],
 			dist: [
 				'coffee',
@@ -490,7 +512,7 @@ module.exports = function (grunt) {
 		grunt.task.run([
 			'clean:server',
 			'wiredep',
-			'ngClassify',
+			'concurrent:ngClassifyServer',
 			'concurrent:server',
 			'injector',
 			'autoprefixer:server',
@@ -518,17 +540,15 @@ module.exports = function (grunt) {
 		'clean:dist',
 		'wiredep',
 		'useminPrepare',
-		'ngClassify',
+		'concurrent:ngClassifyDist',
 		'concurrent:dist',
 		'injector',
 		'autoprefixer',
-		'ngtemplates',
 		'concat',
-		'ngAnnotate',
 		'copy:dist',
 		'cdnify',
 		'cssmin',
-		'uglify',
+		'closurecompiler:minify',
 		'filerev',
 		'usemin',
 		'htmlmin'
