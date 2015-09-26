@@ -6,11 +6,11 @@ class User extends Controller
 
 		ctrl.searchParams = $location.search()
 		ctrl.searchParams.hash = 0
-		ctrl.page = page = 1
+		ctrl.page = 1
 
 		@search = ->
 			ctrl.searchParams.hash++;
-			ctrl.searchParams.page = page - 1
+			ctrl.searchParams.page = ctrl.page - 1
 
 			$location.search ctrl.searchParams
 

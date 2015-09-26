@@ -69,7 +69,7 @@
 					<div class="box-footer">
 						<div class="row">
 							<div class="col-md-6">
-								<pagination total-items="ctrl.users.meta.totalElements" ng-model="ctrl.page" items-per-page="ctrl.users.meta.size" ng-change="ctrl.search(ctrl.searchParams)"></pagination>
+								<pagination total-items="ctrl.users.meta.totalElements" ng-model="ctrl.page" items-per-page="ctrl.users.meta.size" ng-change="ctrl.search()"></pagination>
 							</div>
 							<div class="col-md-6">
 								<div class="pagination alert pull-right">Found <span ng-bind="ctrl.users.meta.totalElements"></span> entries</div>
