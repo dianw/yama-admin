@@ -10,7 +10,6 @@ module.exports = (grunt) ->
 	# Automatically load required Grunt tasks
 	require('jit-grunt')(grunt,
 		useminPrepare: 'grunt-usemin'
-		cdnify: 'grunt-google-cdn'
 		configureProxies: 'grunt-connect-proxy'
 		closureCompiler: 'grunt-closurecompiler'
 	)
@@ -96,14 +95,6 @@ module.exports = (grunt) ->
 				options:
 					open: true
 					base: '<%= yama.dist %>'
-
-		# Make sure code styles are up to par and there are no obvious mistakes
-		jshint:
-			options:
-				jshintrc: '.jshintrc'
-				reporter: require 'jshint-stylish'
-			all:
-				src: ['Gruntfile.js']
 
 		# Empties folders to start fresh
 		clean:
@@ -320,11 +311,6 @@ module.exports = (grunt) ->
 					'max_processes': 5
 					'language_in': 'ECMASCRIPT5'
 
-		# Replace Google CDN references
-		cdnify:
-			dist:
-				html: ['<%= yama.dist %>/*.html']
-
 		# Copies remaining files to places other tasks can use
 		copy:
 			dist:
@@ -417,7 +403,6 @@ module.exports = (grunt) ->
 		'autoprefixer'
 		'concat'
 		'copy:dist'
-		'cdnify'
 		'cssmin'
 		'closurecompiler:minify'
 		'filerev'
@@ -425,6 +410,5 @@ module.exports = (grunt) ->
 		'htmlmin']
 
 	grunt.registerTask 'default', [
-		'newer:jshint'
 		'test',
 		'build']
