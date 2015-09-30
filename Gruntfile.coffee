@@ -12,6 +12,7 @@ module.exports = (grunt) ->
 		useminPrepare: 'grunt-usemin'
 		configureProxies: 'grunt-connect-proxy'
 		closureCompiler: 'grunt-closurecompiler'
+		ghPages: 'grunt-gh-pages'
 	)
 
 	# Configurable paths for the application
@@ -360,6 +361,12 @@ module.exports = (grunt) ->
 			ngClassifyDist: ['ngClassify:app', 'ngClassify:prod']
 			dist: ['coffee', 'copy:styles', 'imagemin', 'svgmin']
 
+		'gh-pages':
+			options:
+				base: '<%= yama.dist %>'
+			release:
+				src: ['**']
+
 		# Test settings
 		karma:
 			unit:
@@ -408,6 +415,10 @@ module.exports = (grunt) ->
 		'filerev'
 		'usemin'
 		'htmlmin']
+
+	grunt.registerTask 'release', [
+		'build'
+		'gh-pages']
 
 	grunt.registerTask 'default', [
 		'test',
