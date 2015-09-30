@@ -1,1 +1,1 @@
-<div class="container"> <ul class="nav nav-tabs"> <li ng-repeat="menu in ctrl.menus" ng-class="{ 'active': ctrl.state.current.name === menu.ref }"> <a ui-sref="{{ menu.ref }}"> <i class="fa fa-{{ menu.icon }}"></i> {{ menu.menu }} </a> </li> </ul> </div>
+<div class="container"> <ul class="nav nav-tabs"> <li ng-repeat="menu in ctrl.menus" ng-class="{ 'active': ctrl.state.current.name.indexOf(menu.ref) === 0 }"> <a ui-sref="{{ menu.ref }}"> <i class="fa fa-{{ menu.icon }}"></i> {{ menu.menu }} </a> </li> </ul> </div>
