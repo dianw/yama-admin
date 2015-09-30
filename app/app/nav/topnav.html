@@ -11,13 +11,13 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse" collapse="navCollapsed">
 			<ul class="nav navbar-nav">
-				<li>
-					<a ui-sref="app.admin">
-						<i class="fa fa-gears"></i> Admin
+				<li ng-repeat="m in ctrl.menus" ng-class="{ 'active': ctrl.state.current.name.indexOf(m.ref) === 0 }">
+					<a ui-sref="{{ m.ref }}">
+						<i class="fa fa-{{ m.icon }}"></i> {{ m.menu }}
 					</a>
 				</li>
 			</ul>
-			<ul class="nav navbar-nav pull-right" ng-init="name = ctrl.currentUser.name">
+			<ul class="nav navbar-nav pull-right" ng-init="name = currentUser.name">
 				<li dropdown>
 					<a href="#" dropdown-toggle>
 						<i class="fa fa-user"></i> {{ name.first }} {{ name.last }}
@@ -26,7 +26,7 @@
 					<ul class="dropdown-menu">
 						<li>
 							<a href="#">
-								<i class="fa fa-pencil"></i> Profile ({{ ctrl.currentUser.username }})
+								<i class="fa fa-pencil"></i> Profile ({{ currentUser.username }})
 							</a>
 						</li>
 					</ul>
