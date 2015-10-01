@@ -32,11 +32,14 @@ module.exports = (config) ->
       'bower_components/angular-validation/dist/angular-validation.js'
       'bower_components/angular-validation/dist/angular-validation-rule.js'
       'bower_components/angular-validation-schema/angular-validation-schema.js'
+      'bower_components/ng-file-upload/ng-file-upload.js'
+      'bower_components/ng-file-upload-shim/ng-file-upload-shim.js'
       'bower_components/ngstorage/ngStorage.js'
       'bower_components/oauth-ng/dist/oauth-ng.js'
       'bower_components/lodash/lodash.js'
       'bower_components/restangular/dist/restangular.js'
       'bower_components/ui-select/dist/select.js'
+      'bower_components/imgLiquid/js/imgLiquid.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

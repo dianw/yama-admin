@@ -7,6 +7,7 @@ class YamaApp extends App
 			'angularPopupBoxes'
 			'ngAnimate'
 			'ngCookies'
+			'ngFileUpload'
 			'ngResource'
 			'ngRoute'
 			'ngSanitize'
@@ -61,7 +62,8 @@ class ValidationConfig extends Config
 class UserValidation extends Run
 	constructor: ($validation, RestUserService) ->
 		$validation.setExpression
-			userexist: (value) ->
+			userexist: (value, scope, element, attrs, param) ->
+				return true if attrs.exclude == value
 				RestUserService.one(value).get().then ((user) -> !user), (-> true)
 
 class UiSelectConfig extends Config
@@ -93,3 +95,14 @@ class ActivateOauth extends Run
 				$rootScope.$state.toState.params = toParams
 
 				oauth.login()
+
+class ImgLiquid extends Directive
+	constructor: ($timeout) ->
+		return {
+			restrict: 'A'
+			link: (scope, element, attr) ->
+				element.height(element.width())
+
+				$timeout ->
+					element.imgLiquid fill: true, horizontalAlign: 'center', verticalAlign: '50%'
+		}

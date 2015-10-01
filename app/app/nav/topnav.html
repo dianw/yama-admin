@@ -18,15 +18,19 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav pull-right" ng-init="name = currentUser.name">
+				<li ng-class="{ 'active': ctrl.state.current.name.indexOf('app.profile') === 0 }">
+					<a ui-sref="app.profile">
+						<i class="fa fa-user"></i> {{ currentUser.username }}
+					</a>
+				</li>
 				<li dropdown>
 					<a href="#" dropdown-toggle>
-						<i class="fa fa-user"></i> {{ name.first }} {{ name.last }}
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="#">
-								<i class="fa fa-pencil"></i> Profile ({{ currentUser.username }})
+							<a href="">
+								<i class="fa fa-sign-out"></i> Logout
 							</a>
 						</li>
 					</ul>
