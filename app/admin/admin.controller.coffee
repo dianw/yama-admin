@@ -10,4 +10,4 @@ class Admin extends Controller
 
 		@state = $state
 
-		@state.go @menus[0].ref
+		@state.go @menus[0].ref if $state.current.name == 'app.admin'

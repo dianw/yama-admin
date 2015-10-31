@@ -14,5 +14,5 @@ class App extends Controller
 
 		@state = $state
 
-		$state.go 'app.admin'
+		$state.go 'app.admin' if $state.current.name == 'app'
 
